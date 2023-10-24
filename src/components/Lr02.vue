@@ -6,6 +6,7 @@
             width: width,
             height: height,
             position: 'absolute',
+            left: '0px',
             backgroundRepeat: 'repeate-x',
             backgroundPosition: 'center',
             backgroundSize: 'contain'

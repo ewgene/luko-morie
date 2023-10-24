@@ -1,7 +1,11 @@
 <template>
   <div id="scroll">
-    <Lr01 />
-    <Lr02 />
+    <div class="container">
+      <Lr01 />
+    </div>
+    <div class="container">
+      <Lr02 />
+    </div>
   </div>
   
 </template>
@@ -28,7 +32,14 @@ export default defineComponent({
 
 <style lang="scss">
 #scroll {
-  position: relative
+  position: relative;
+
+  .container {
+    width: 100%;
+    height: 650px;
+    position: absolute;
+  }
 }
+
 
 </style>
