@@ -7,6 +7,7 @@
             height: height,
             position: 'absolute',
             left: '0px',
+            backgroundImage: `url('${src64}')`,
             backgroundRepeat: 'repeate-x',
             backgroundPosition: 'center',
             backgroundSize: 'contain'
@@ -28,12 +29,12 @@ export default defineComponent({
         img.src = Bg.src
         const src64 = img.src
 
-        onMounted(() => {
+        /*onMounted(() => {
             const layOut = document.getElementById('bg_02')
             if(layOut) {
                 layOut.style.backgroundImage = `url('${src64}')`
             }
-        })
+        })*/
 
         return {
             width,
@@ -45,9 +46,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-    .bg {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-    }
 </style>
