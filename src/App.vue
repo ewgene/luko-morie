@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue'
-import gsap from 'gsap'
 import Panorama from './components/Panorama.vue'
 
 export default defineComponent({
