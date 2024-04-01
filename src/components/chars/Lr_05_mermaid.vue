@@ -1,13 +1,13 @@
 <template>
     <div 
-        id="djadka"
-        ref="djadka"
+        id="mermaid"
+        ref="mermaid"
         :style="{
             width: width,
             height: height,
             position: 'absolute',
-            left: '1310.5px',
-            top: '95px',
+            left: '0.5px',
+            top: '0px',
             backgroundImage: `url('${src64}')`,
             backgroundPosition: 'center',
             backgroundSize: 'contain'
@@ -17,17 +17,17 @@
 
 <script lang="ts">
 import { ref, defineComponent, computed, onMounted } from "vue"
-import { lr_05_djadka } from "./lr_05_djadka"
+import { lr_05_mermaid } from "./lr_05_mermaid"
 
 export default defineComponent({
-    name: "Lr_05_djadka",
+    name: "Lr_05_mermaid",
 
     setup() {
-        const height = lr_05_djadka.height+"px"
-        const width = lr_05_djadka.width+"px"
+        const height = lr_05_mermaid.height+"px"
+        const width = lr_05_mermaid.width+"px"
 
         let img = new Image()
-        img.src = lr_05_djadka.src
+        img.src = lr_05_mermaid.src
         const src64 = img.src
 
         return {

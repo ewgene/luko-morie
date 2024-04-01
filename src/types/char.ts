@@ -1,12 +1,14 @@
+export interface Modal {
+    bg: string,
+    hd: string,
+    sm: string
+}
+
 export interface Char {
-    name: string,
     width: number,
     height: number,
-    inner: {
-        bg: string,
-        hd: string,
-        sm: string
-    },
+    name: string,
     text: string,
+    inner: Modal,
     src: string
 }
