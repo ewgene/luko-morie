@@ -18,8 +18,35 @@
     <div class="container">
       <Lr05 />
     </div>
-
-    <div class="display">Mouse position is at: {{ delta }}</div>
+    
+    <div 
+      class="oklad-top"
+      id="oklad_top"
+      :style = "{
+        position: 'fixed',
+        left: topPos+'px',
+        width: okladTop.width+'px',
+        height: okladTop.height+'px',
+        backgroundImage: `url('${top}')`,
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat'
+      }"></div>
+    <div class="display">position is at: {{ delta }} : {{ beginning }} : {{ ending  }}</div> 
+    <div 
+      class="oklad-bot"
+      id="oklad_bot"
+      :style = "{
+        position: 'fixed',
+        left: botPos+'px',
+        bottom: 0,
+        width: okladBottom.width+'px',
+        height: okladBottom.height+'px',
+        backgroundImage: `url('${bot}')`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat'
+      }"></div>
   </div>
   
 </template>
@@ -32,6 +59,9 @@ import Lr02 from "./Lr02.vue"
 import Lr03 from "./Lr03.vue"
 import Lr04 from "./Lr04.vue"
 import Lr05 from "./Lr05.vue"
+
+import { oklad_top } from "../components/lib/bg/oklad_top"
+import { oklad_bottom } from "../components/lib/bg/oklad_bottom"
 
 export default defineComponent({
   name: "Panorama",
@@ -49,13 +79,32 @@ export default defineComponent({
     const delta = ref(0)
     const drag = ref(false)
     const current = ref(0)
+    const beginning = ref(0)
+    const ending = ref(0)
     const midpoint = screen.width/2;
-    
     const lr_01:HTMLElement|any = ref()
     const lr_02:HTMLElement|any = ref()    
     const lr_03:HTMLElement|any = ref()
     const lr_04:HTMLElement|any = ref()
     const lr_05:HTMLElement|any = ref()
+
+    const top = ref(oklad_top.src)
+    const bot = ref(oklad_bottom.src)
+
+    const topPos = ref(0)
+    const botPos = ref(0)
+
+    const okladTop = {
+      width: oklad_top.width,
+      height: oklad_top.height,
+      src: oklad_top.src
+    }
+
+    const okladBottom = {
+      width: oklad_bottom.width,
+      height: oklad_bottom.height,
+      src: oklad_bottom.src
+    }
 
     onMounted(() => {
       function stackLayers() {
@@ -76,11 +125,15 @@ export default defineComponent({
         }
       }
       stackLayers()
+      topPos.value = (window.innerWidth - okladTop.width)/2
+      botPos.value = (window.innerWidth - okladBottom.width)/2
     })
 
     watch(mX, ()=> {
       drag.value = true
       current.value = Math.round(lr_01.value.getBoundingClientRect().x)
+      beginning.value = Math.round(lr_01.value.getBoundingClientRect().left)
+      ending.value = Math.round(lr_01.value.getBoundingClientRect().right)
     })
 
     watch(dX, ()=> {
@@ -146,10 +199,18 @@ export default defineComponent({
       lr_03,
       lr_04,
       lr_05,
+      okladTop,
+      okladBottom,
+      topPos,
+      botPos,
+      top,
+      bot,
       midpoint,
       mX,
       dX,
       current,
+      beginning,
+      ending,
       delta,
       update
     }

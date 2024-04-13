@@ -9,8 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "cacache": "^18.0.2",
+    "@vue/shared": "^3.4.21",
     "gsap": "^3.12.2",
+    "pinia": "^2.1.7",
     "sass": "^1.68.0",
     "vue": "^3.3.4"
   },
