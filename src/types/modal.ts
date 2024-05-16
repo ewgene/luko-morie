@@ -1,13 +1,10 @@
-import { extend } from "@vue/shared";
+export type Modal = {
+    isOpen: boolean,
+    view: object,
+    actions?: ModalAction[],
+};
 
-const component = extend({});
-type VueComponent = InstanceType<typeof component>;
-
-export interface IModalProps {
-    component: null | VueComponent;
-    props?: object;
-  }
-  
-export interface IModalState {
-    modalState: IModalProps;
-  }
+    export type ModalAction = {
+    label: string,
+    callback: (props?: any) => void,
+};

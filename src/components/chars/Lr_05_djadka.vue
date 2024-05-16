@@ -31,6 +31,7 @@ export default defineComponent({
         const src64 = img.src
 
         return {
+            lr_05_djadka,
             width,
             height,
             src64

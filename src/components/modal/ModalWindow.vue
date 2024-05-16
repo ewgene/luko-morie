@@ -1,37 +1,36 @@
 <template>
-    <Teleport to="body">
-        <Transition name="modal-fade">
-        <div
-            class="modal-wrapper"
-            @click.self="store.closeModal"
-            v-if="store.modalState?.component"
-            aria-modal="true"
-            role="dialog"
-            tabindex="-1"
+  <div>
+    <div v-if="isOpen" class="modal modal-open">
+      <div class="modal-box relative">
+        <label
+          class="btn btn-sm btn-circle absolute right-2 top-2"
+          @click="store.close()"
+          >✕</label
         >
-            <component
-            :is="store.modalState?.component"
-            v-bind="store.modalState?.props"
-            />
+
+        <component :is="view" v-model="model"></component>
+
+        <div class="modal-action">
+          <button
+            v-for="action in actions"
+            class="btn"
+            @click="action.callback(model)"
+          >
+            {{ action.label }}
+          </button>
         </div>
-        </Transition>
-    </Teleport>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script setup lang="ts">
-import { onMounted, onUnmounted } from "vue"
-import useModalStore from "../../stores/useModalStore"
+<script lang="ts" setup>
+  import { reactive } from "vue";
+  import { storeToRefs } from "pinia";
+  import { useModal } from "../../stores/modalStore";
 
-const store = useModalStore()
+  const store = useModal()
+  const model = reactive({})
 
-
-function keydownListener(event: KeyboardEvent) {
-    if(event.key === "Escape") 
-        store.closeModal()
-}
-
-onUnmounted(() => {
-  document.removeEventListener("keydown", keydownListener)
-})
-
+  const { isOpen, view, actions } = storeToRefs(store);
 </script>

@@ -1,7 +1,11 @@
 <template>
   <div id="scroll" 
     @mousedown="mX = $event.pageX"
-    @mouseup="dX = $event.pageX">
+    @mouseup="dX = $event.pageX"
+    :style="{
+      marginTop: scrollOffset+'px'
+    }"
+    >
 
     <div class="container">
       <Lr01 />
@@ -25,6 +29,7 @@
       :style = "{
         position: 'fixed',
         left: topPos+'px',
+        top: scrollOffset+'px',
         width: okladTop.width+'px',
         height: okladTop.height+'px',
         backgroundImage: `url('${top}')`,
@@ -39,7 +44,7 @@
       :style = "{
         position: 'fixed',
         left: botPos+'px',
-        bottom: 0,
+        bottom: scrollOffset+'px',
         width: okladBottom.width+'px',
         height: okladBottom.height+'px',
         backgroundImage: `url('${bot}')`,
@@ -91,8 +96,14 @@ export default defineComponent({
     const top = ref(oklad_top.src)
     const bot = ref(oklad_bottom.src)
 
+    const scrollHeight = 650
+    const scrollOffset = ref(0)
+
+
     const topPos = ref(0)
+//    const topOffset = ref(0)
     const botPos = ref(0)
+//    const botOffset = ref(0)
 
     const okladTop = {
       width: oklad_top.width,
@@ -125,6 +136,7 @@ export default defineComponent({
         }
       }
       stackLayers()
+      scrollOffset.value = (window.innerHeight - scrollHeight)/2
       topPos.value = (window.innerWidth - okladTop.width)/2
       botPos.value = (window.innerWidth - okladBottom.width)/2
     })
@@ -199,6 +211,8 @@ export default defineComponent({
       lr_03,
       lr_04,
       lr_05,
+      scrollHeight,
+      scrollOffset,
       okladTop,
       okladBottom,
       topPos,

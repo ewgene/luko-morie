@@ -33,7 +33,9 @@ export default defineComponent({
         return {
             width,
             height,
-            src64
+            src64,
+            lr_05_mermaid
+            
         }
     }
 })

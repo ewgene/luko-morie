@@ -1,4 +1,4 @@
-export interface Modal {
+export interface ModalInfo {
     bg: string,
     hd: string,
     sm: string
@@ -9,6 +9,6 @@ export interface Char {
     height: number,
     name: string,
     text: string,
-    inner: Modal,
+    inner: ModalInfo,
     src: string
 }
