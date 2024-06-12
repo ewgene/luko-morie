@@ -20,7 +20,7 @@
       <Lr04 />
     </div>
     <div class="container">
-      <Lr05 />
+      <Lr05 :deltaTick="deltaTick"/>
     </div>
     
     <div 
@@ -93,6 +93,8 @@ export default defineComponent({
     const lr_04:HTMLElement|any = ref()
     const lr_05:HTMLElement|any = ref()
 
+    const deltaTick:number|any = ref(0)
+
     const top = ref(oklad_top.src)
     const bot = ref(oklad_bottom.src)
 
@@ -154,6 +156,8 @@ export default defineComponent({
     })
     
     function callback() {
+      deltaTick.value = delta.value*2.356
+      console.log(deltaTick.value)
       drag.value = false
       delta.value = 0
     }
@@ -202,7 +206,6 @@ export default defineComponent({
         delta = delta - Math.abs((mX.value - dX.value)/50)
       }
       moveStack()
-
     }
 
     return {
@@ -226,6 +229,7 @@ export default defineComponent({
       beginning,
       ending,
       delta,
+      deltaTick,
       update
     }
   }

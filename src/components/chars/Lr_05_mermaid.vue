@@ -2,6 +2,7 @@
     <div 
         id="mermaid"
         ref="mermaid"
+        @click="openModal" 
         :style="{
             width: width,
             height: height,
@@ -30,12 +31,16 @@ export default defineComponent({
         img.src = lr_05_mermaid.src
         const src64 = img.src
 
+        function openModal() {
+           console.log(lr_05_mermaid) 
+        }
+
         return {
             width,
             height,
             src64,
-            lr_05_mermaid
-            
+            lr_05_mermaid,
+            openModal
         }
     }
 })

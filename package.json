@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vue/shared": "^3.4.21",
+    "@vueuse/core": "^10.10.0",
     "gsap": "^3.12.2",
     "pinia": "^2.1.7",
     "pnpm": "^9.0.6",
