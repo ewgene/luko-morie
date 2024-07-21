@@ -1,11 +1,10 @@
 <template>
     <div 
         id="bg_05"
-        ref="lr_05"
         :style="{
             width: width,
             height: height,
-            position: 'absolute',
+            position: 'relative',
             left: '0px',
             backgroundImage: `url('${src64}')`,
             backgroundRepeat: 'repeate-x',
