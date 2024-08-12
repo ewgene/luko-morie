@@ -8,19 +8,54 @@
       >
   
       <div class="container" id="c01">
-        <Lr01 ref="lr_01"/>
+        <ul id="layer_01">
+          <li id="lr_01_orig"
+              class="layer">
+            <Lr01 
+              ref="lr_01"/>
+          </li>
+        </ul>
       </div>
       <div class="container" id="c02">
-        <Lr02 ref="lr_02"/>
+        <ul id="layer_02">
+          <li id="lr_02_orig"
+              class="layer">
+            <Lr02 
+              class="layer"
+              ref="lr_02"/>
+          </li>
+        </ul>
       </div>
       <div class="container" id="c03">
-        <Lr03 ref="lr_03" />
+        <ul id="layer_03">
+          <li id="lr_03_orig"
+              class="layer">
+            <Lr03 
+              class="layer"
+              ref="lr_03"/>
+          </li>
+        </ul>
       </div>
       <div class="container" id="c04">
-        <Lr04 ref="lr_04"/>
+        <ul id="layer_04">
+          <li id="lr_04_orig"
+              class="layer">
+            <Lr04 
+              class="layer"
+              ref="lr_04"/>
+          </li>
+        </ul>
       </div>
       <div class="container" id="c05">
-        <Lr05 ref="lr_05" :deltaTick="deltaTick"/>
+        <ul id="layer_05">
+          <li id="lr_05_orig"
+              class="layer">
+            <Lr05 
+              class="layer"
+              ref="lr_05"
+              :deltaTick="deltaTick"/>
+          </li>
+        </ul>
       </div>
       
       <div 
@@ -37,7 +72,6 @@
           backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat'
         }"></div>
-      <div class="display">position is at: {{ delta }} : {{ beginning }} : {{ ending  }}</div> 
       <div 
         class="oklad-bot"
         id="oklad_bot"
@@ -57,17 +91,17 @@
   </template>
   
   <script lang="ts">
-  import { ref, defineComponent, onMounted, watch, computed } from 'vue'
+  import { ref, defineComponent, Component, onMounted, watch, computed, createApp, resolveDynamicComponent } from 'vue'
   import gsap from 'gsap'
   import Lr01 from "./Lr01.vue"
   import Lr02 from "./Lr02.vue"
   import Lr03 from "./Lr03.vue"
   import Lr04 from "./Lr04.vue"
   import Lr05 from "./Lr05.vue"
+  import {h} from 'vue'
   
   import { oklad_top } from "../components/lib/bg/oklad_top"
   import { oklad_bottom } from "../components/lib/bg/oklad_bottom"
-import { lr_05_djadka } from './chars/lr_05_djadka'
   
   export default defineComponent({
     name: "Panorama",
@@ -93,6 +127,11 @@ import { lr_05_djadka } from './chars/lr_05_djadka'
       const lr_03 = ref<InstanceType<typeof Lr03> | null>(null)
       const lr_04 = ref<InstanceType<typeof Lr04> | null>(null)
       const lr_05 = ref<InstanceType<typeof Lr05> | null>(null)
+      const layer_01 = ref<HTMLElement | any>()
+      const layer_02 = ref<HTMLElement | any>()
+      const layer_03 = ref<HTMLElement | any>()
+      const layer_04 = ref<HTMLElement | any>()
+      const layer_05 = ref<HTMLElement | any>()
   
       const deltaTick:number|any = ref(0)
   
@@ -100,10 +139,7 @@ import { lr_05_djadka } from './chars/lr_05_djadka'
       const bot = ref(oklad_bottom.src)
   
       const scrollHeight = 650
-      const scrollOffset = ref(0)
-
-      const copy = ref(null)
-  
+      const scrollOffset = ref(0)  
   
       const topPos = ref(0)
   //    const topOffset = ref(0)
@@ -121,26 +157,19 @@ import { lr_05_djadka } from './chars/lr_05_djadka'
         height: oklad_bottom.height,
         src: oklad_bottom.src
       }
+
+      const copyComp = []
   
       onMounted(() => {
-/*        function stackLayers() {
-          if(document.querySelector('#bg_01')) {
-            lr_01.value = computed(() => document.querySelector('#bg_01'))
-          }
-          if(document.querySelector('#bg_02')) {
-            lr_02.value?.$el = computed(() => document.querySelector('#bg_02'))
-          }
-          if(document.querySelector('#bg_03')) {
-            lr_03.value?.$el = computed(() => document.querySelector('#bg_03'))
-          }
-          if(document.querySelector('#bg04')) {
-            lr_04.value?.$el = computed(() => document.querySelector('#bg_04'))
-          }
-          if(document.querySelector('#bg_05')) {
-            lr_05.value?.$el = computed(() => document.querySelector('#bg_05'))
-          }
+        function buildStack() {
+          layer_01.value = document.getElementById('layer_01')
+          layer_02.value = document.getElementById('layer_02')
+          layer_03.value = document.getElementById('layer_03')
+          layer_04.value = document.getElementById('layer_04')
+          layer_05.value = document.getElementById('layer_05')
+          console.log(layer_05.value)
         }
-        stackLayers()*/
+        buildStack()
         scrollOffset.value = (window.innerHeight - scrollHeight)/2
         topPos.value = (window.innerWidth - okladTop.width)/2
         botPos.value = (window.innerWidth - okladBottom.width)/2
@@ -163,52 +192,76 @@ import { lr_05_djadka } from './chars/lr_05_djadka'
         console.log(deltaTick.value)
         drag.value = false
         delta.value = 0
+        console.log(document.querySelector('#copy-left')?.getBoundingClientRect().x)
       }
 
-      function insertComponent(parent:string, src:string, direction:number) {
+      const ancorLr05:number|any = computed(()=> {
+          return layer_05.value?.getBoundingClientRect().left}
+      )
 
-        if(Math.round(lr_05.value?.$el.getBoundingClientRect().x) === 0 
-          || Math.floor(lr_05.value?.$el.getBoundingClientRect().rightt) === window.innerWidth) {
-          let container = document.getElementById(parent)
-          console.log(container, src, direction)
+      function insertComponent(parent:HTMLElement|any, src:string|Component, ancor:number, wdth:number, direction:string) {
 
+//        console.log(layer_05.value?.getBoundingClientRect().left)
+
+        if(Math.round(layer_05.value?.getBoundingClientRect().left) === 0 
+          || Math.floor(layer_05.value?.getBoundingClientRect().right) === window.innerWidth) {
+          let container:HTMLElement|any = parent
+          console.log(container, src, ancor, wdth, direction)
           
-        }
-        
+          if(direction == 'right') {
+            let html = "<li id='copy-left' class='layer' style='width:"+wdth+"px'>"+src+"</li></nobr>"
+            container?.insertAdjacentHTML("afterbegin", html)
+            let target = document.querySelector('#copy-left')
+            
+            gsap.to(target, {
+              left: - wdth + delta.value * 2.356000,
+              ease: 'none',
+              duration: 0
+            })
+          } else {
+            let html = "</nobr><li class='layer' style='width:"+wdth+"px'><svg viewBox='0 0 7871 650' xmlns='http://www.w3.org/2000/svg'><rect width='7871' height='650' fill='transparent' /></li>"
+            container?.insertAdjacentHTML("beforeend", html)
+          }
+        }        
       }
   
       function moveStack() {
-        gsap.to(lr_01.value?.$el, {
+        gsap.to(layer_01.value, {
             x: delta.value,
             ease: 'none',
             duration: 10
           }
         )
-        gsap.to(lr_02.value?.$el, {
+        gsap.to(layer_02.value, {
             x: delta.value*1.203000,
             ease: 'none',
             duration: 10
           }
         )
-        gsap.to(lr_03.value?.$el, {
+        gsap.to(layer_03.value, {
             x: delta.value*1.330000,
             ease: 'none',
             duration: 10
           }
         )
-        gsap.to(lr_04.value?.$el, {
+        gsap.to(layer_04.value, {
             x: delta.value*1.71400,
             ease: 'none',
             duration: 10
           }
         )
-        gsap.to(lr_05.value?.$el, {
+        gsap.to(layer_05.value, {
             x: delta.value*2.356000,
             ease: 'none',
             duration: 10,
             onUpdate: () => {
-              let direction = delta.value > 0? 1 : -1
-              insertComponent('c05', 'Lr05', direction)},
+              let direction = delta.value > 0? 'right' : 'left'
+              let ancor = lr_05.value?.$el.getBoundingClientRect().x
+              let src = createApp(Lr05)
+              let wdth:number|any = document.querySelector('#bg_05')?.getBoundingClientRect().width
+              let parent = document.querySelector('#layer_05')
+ //             console.log(parent)
+              insertComponent(parent, src, ancor, wdth, direction)},
             onComplete: callback
           }
         )
@@ -218,7 +271,7 @@ import { lr_05_djadka } from './chars/lr_05_djadka'
   
         if(mX.value < dX.value) {
           delta = delta + Math.abs((mX.value - dX.value)/50)
-        }
+        } 
         if(mX.value > dX.value) {
           delta = delta - Math.abs((mX.value - dX.value)/50)
         }
@@ -231,6 +284,11 @@ import { lr_05_djadka } from './chars/lr_05_djadka'
         lr_03,
         lr_04,
         lr_05,
+        layer_01,
+        layer_02,
+        layer_03,
+        layer_04,
+        layer_05,
         scrollHeight,
         scrollOffset,
         okladTop,
@@ -247,7 +305,8 @@ import { lr_05_djadka } from './chars/lr_05_djadka'
         ending,
         delta,
         deltaTick,
-        update
+        update,
+        ancorLr05
       }
     }
   })
@@ -265,6 +324,38 @@ import { lr_05_djadka } from './chars/lr_05_djadka'
       width: 100%;
       height: 650px;
       position: absolute;
+
+      & * {
+        margin: 0;
+        padding: 0;
+      }
+
+      ul {
+        list-style-type: none;
+        white-space: nowrap;
+        overflow: visible;        
+
+        li {
+          display: inline-block;
+        }
+
+        #copy-left {
+          background-color: #aaa;
+        }
+      }
+
+      .layer {
+        height: 650px;
+        display: inline-block;
+        position: absolute;
+      }
+
+      .copy {
+        background-color: #ccc;
+        position: absolute;
+        display: inline-block;
+        height: 650px;
+      }
     }
     .display {
       position: absolute;
