@@ -91,7 +91,7 @@
   </template>
   
   <script lang="ts">
-  import { ref, defineComponent, Component, onMounted, watch, computed, createApp, resolveDynamicComponent } from 'vue'
+  import { ref, defineComponent, Component, onMounted, watch, computed, createApp } from 'vue'
   import gsap from 'gsap'
   import Lr01 from "./Lr01.vue"
   import Lr02 from "./Lr02.vue"
@@ -102,6 +102,9 @@
   
   import { oklad_top } from "../components/lib/bg/oklad_top"
   import { oklad_bottom } from "../components/lib/bg/oklad_bottom"
+import { render } from 'vue'
+import { VueInstance } from '@vueuse/core'
+import { App } from 'vue'
   
   export default defineComponent({
     name: "Panorama",
@@ -157,8 +160,6 @@
         height: oklad_bottom.height,
         src: oklad_bottom.src
       }
-
-      const copyComp = []
   
       onMounted(() => {
         function buildStack() {
@@ -167,7 +168,6 @@
           layer_03.value = document.getElementById('layer_03')
           layer_04.value = document.getElementById('layer_04')
           layer_05.value = document.getElementById('layer_05')
-          console.log(layer_05.value)
         }
         buildStack()
         scrollOffset.value = (window.innerHeight - scrollHeight)/2
@@ -199,7 +199,11 @@
           return layer_05.value?.getBoundingClientRect().left}
       )
 
-      function insertComponent(parent:HTMLElement|any, src:string|Component, ancor:number, wdth:number, direction:string) {
+ /*     function renderComponent({el, component, props, appContext}) {
+        const appContext = 
+      }*/
+
+      function insertComponent(parent:HTMLElement|any, src:App, ancor:number, wdth:number, direction:string) {
 
 //        console.log(layer_05.value?.getBoundingClientRect().left)
 
@@ -209,15 +213,19 @@
           console.log(container, src, ancor, wdth, direction)
           
           if(direction == 'right') {
-            let html = "<li id='copy-left' class='layer' style='width:"+wdth+"px'>"+src+"</li></nobr>"
-            container?.insertAdjacentHTML("afterbegin", html)
-            let target = document.querySelector('#copy-left')
-            
-            gsap.to(target, {
-              left: - wdth + delta.value * 2.356000,
-              ease: 'none',
-              duration: 0
-            })
+            let html = "<li id='copy' class='layer left' style='width:"+wdth+"px'>"+src+"</li></nobr>"
+            if(!document.querySelector('#copy')) {
+              container?.insertAdjacentHTML("afterbegin", html)
+              let target:HTMLDListElement|any = document.querySelector('#copy')
+              
+              src.mount(target)
+              
+              gsap.to(target, {
+                left: - wdth + delta.value * 2.356000,
+                ease: 'none',
+                duration: 0
+              })
+            }
           } else {
             let html = "</nobr><li class='layer' style='width:"+wdth+"px'><svg viewBox='0 0 7871 650' xmlns='http://www.w3.org/2000/svg'><rect width='7871' height='650' fill='transparent' /></li>"
             container?.insertAdjacentHTML("beforeend", html)
@@ -256,11 +264,10 @@
             duration: 10,
             onUpdate: () => {
               let direction = delta.value > 0? 'right' : 'left'
-              let ancor = lr_05.value?.$el.getBoundingClientRect().x
-              let src = createApp(Lr05)
+              let ancor = lr_05.value?.$el.getBoundingClientRect().left
               let wdth:number|any = document.querySelector('#bg_05')?.getBoundingClientRect().width
-              let parent = document.querySelector('#layer_05')
- //             console.log(parent)
+              let parent:HTMLDListElement|any = document.querySelector('#layer_05')
+              const src:App = createApp(Lr05) 
               insertComponent(parent, src, ancor, wdth, direction)},
             onComplete: callback
           }
