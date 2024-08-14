@@ -199,10 +199,6 @@ import { App } from 'vue'
           return layer_05.value?.getBoundingClientRect().left}
       )
 
- /*     function renderComponent({el, component, props, appContext}) {
-        const appContext = 
-      }*/
-
       function insertComponent(parent:HTMLElement|any, src:App, ancor:number, wdth:number, direction:string) {
 
 //        console.log(layer_05.value?.getBoundingClientRect().left)
@@ -227,8 +223,19 @@ import { App } from 'vue'
               })
             }
           } else {
-            let html = "</nobr><li class='layer' style='width:"+wdth+"px'><svg viewBox='0 0 7871 650' xmlns='http://www.w3.org/2000/svg'><rect width='7871' height='650' fill='transparent' /></li>"
-            container?.insertAdjacentHTML("beforeend", html)
+            let html = "</nobr><li id='copy' class='layer' style='width:"+wdth+"px'>"+src+"</li>"
+            if(!document.querySelector('#copy')) {
+              container?.insertAdjacentHTML("beforeend", html)
+              let target:HTMLDListElement|any = document.querySelector('#copy')
+              
+              src.mount(target)
+              
+              gsap.to(target, {
+                left: - wdth + delta.value * 2.356000,
+                ease: 'none',
+                duration: 0
+              })
+            }
           }
         }        
       }
@@ -249,13 +256,27 @@ import { App } from 'vue'
         gsap.to(layer_03.value, {
             x: delta.value*1.330000,
             ease: 'none',
-            duration: 10
+            duration: 10,
+            onUpdate: () => {
+              let direction = delta.value > 0? 'right' : 'left'
+              let ancor = lr_05.value?.$el.getBoundingClientRect().left
+              let wdth:number|any = document.querySelector('#bg_05')?.getBoundingClientRect().width
+              let parent:HTMLDListElement|any = document.querySelector('#layer_05')
+              const src:App = createApp(Lr05) 
+              insertComponent(parent, src, ancor, wdth, direction)},
           }
         )
         gsap.to(layer_04.value, {
             x: delta.value*1.71400,
             ease: 'none',
-            duration: 10
+            duration: 10,
+            onUpdate: () => {
+              let direction = delta.value > 0? 'right' : 'left'
+              let ancor = lr_05.value?.$el.getBoundingClientRect().left
+              let wdth:number|any = document.querySelector('#bg_04')?.getBoundingClientRect().width
+              let parent:HTMLDListElement|any = document.querySelector('#layer_04')
+              const src:App = createApp(Lr04) 
+              insertComponent(parent, src, ancor, wdth, direction)},
           }
         )
         gsap.to(layer_05.value, {
@@ -344,10 +365,6 @@ import { App } from 'vue'
 
         li {
           display: inline-block;
-        }
-
-        #copy-left {
-          background-color: #aaa;
         }
       }
 

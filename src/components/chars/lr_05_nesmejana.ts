@@ -1,4 +1,4 @@
-import { Char } from "../../../types/char"
+import { Char } from "../../types/char"
 
 export const lr_05_nesmejana:Char = { 
     height: 331,
